@@ -10,8 +10,7 @@ action :create do
     updating_data,
     @current_resource.user,
     @current_resource.group,
-    @current_resource.mode,
-    false
+    @current_resource.mode
   )
 end
 

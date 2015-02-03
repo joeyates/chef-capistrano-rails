@@ -11,7 +11,7 @@ require "yaml"
 module YamlResource
   include AttributesConverger
 
-  def create_or_update_yaml_resource(path, data, user, group, mode, replace)
+  def create_or_update_yaml_resource(path, data, user, group, mode)
     resource_directory = ::File.dirname(path)
     if ! directory_exists?(resource_directory)
       raise %Q(The resource's directory "#{resource_directory}" does not exist)
@@ -22,19 +22,14 @@ module YamlResource
       optionally_update_ownership path, user, group
     end
 
-    optionally_update_file path, data, user, group, mode, replace
+    optionally_update_file path, data, user, group, mode
   end
 
   private
 
-  def optionally_update_file(path, data, user, group, mode, replace)
-    new_content =
-      if replace
-        content_from(data)
-      else
-        existing = existing_data(path)
-        merged_content(existing, data)
-      end
+  def optionally_update_file(path, data, user, group, mode)
+    existing = existing_data(path)
+    new_content = merged_content(existing, data)
 
     yaml_diff = DiffableResource.create_diff(path, new_content)
     return if yaml_diff.nil?

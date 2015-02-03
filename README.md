@@ -53,10 +53,10 @@ Attributes:
 * `user` - (required) the owner of the file
 * `group` - (required) the group owner of the file
 * `mode` - the permissions to set on the file. Default: 0600.
+* `environment` - the Rails environment. Default: `production`
 * `database` - (required) the name of the database
 * `username` - (required) the database user name
 * `password` - (required) the database password
-* `environment` - the Rails environment. Default: `production`
 * `options` - a Hash of other options (e.g. `pool`, `encoding`, etc). Default: `{}`
 
 The supplied configuration is merged into any existing file. So, multiple
@@ -72,8 +72,9 @@ Creates `shared/config/secrets.yml`.
 Attributes:
 
 * `path` - the deployment's directory (defaults to the name of the directive),
+* `environment` - the Rails environment. Default: `production`
 * `secret_key_base` - (required) the application's `secret_key_base`,
 * `secret_token` - (required) the application's `secret_token`,
 * `other_secrets` - a Hash of other values to include in the file.
 
-The supplied data is used to overwrite the content of any existing file.
+The supplied data is used to merged into any existing file.
