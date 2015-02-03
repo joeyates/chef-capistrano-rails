@@ -19,6 +19,7 @@ def load_current_resource
     @new_resource.directory
   )
   @current_resource.directory(@new_resource.directory)
+  @current_resource.adapter(@new_resource.adapter)
   @current_resource.database(@new_resource.database)
   @current_resource.user(@new_resource.user)
   @current_resource.group(@new_resource.group)
@@ -35,6 +36,7 @@ def updating_data
   end
   {
     @current_resource.environment => {
+      "adapter" => @current_resource.adapter,
       "database" => @current_resource.database,
       "user" => @current_resource.user,
       "password" => @current_resource.password,
