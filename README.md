@@ -74,7 +74,6 @@ Attributes:
 * `path` - the deployment's directory (defaults to the name of the directive),
 * `environment` - the Rails environment. Default: `production`
 * `secret_key_base` - (required) the application's `secret_key_base`,
-* `secret_token` - (required) the application's `secret_token`,
 * `other_secrets` - a Hash of other values to include in the file.
 
 The supplied data is used to merged into any existing file.
