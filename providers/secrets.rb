@@ -24,14 +24,12 @@ def load_current_resource
   @current_resource.group(@new_resource.group)
   @current_resource.mode(@new_resource.mode)
   @current_resource.secret_key_base(@new_resource.secret_key_base)
-  @current_resource.secret_token(@new_resource.secret_token)
   @current_resource.other_secrets(@new_resource.other_secrets)
 end
 
 def new_data
   {
     "secret_key_base" => @current_resource.secret_key_base,
-    "secret_token" => @current_resource.secret_token,
   }.merge(@current_resource.other_secrets)
 end
 
