@@ -30,12 +30,15 @@ def load_current_resource
 end
 
 def updating_data
+  stringified = @current_resource.options.each.with_object({}) do |(k, v), h|
+    h[k.to_s] = v
+  end
   {
     @current_resource.environment => {
       "database" => @current_resource.database,
       "user" => @current_resource.user,
       "password" => @current_resource.password,
-    }.merge(@current_resource.options)
+    }.merge(stringified)
   }
 end
 
