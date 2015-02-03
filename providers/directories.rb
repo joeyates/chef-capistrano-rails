@@ -43,10 +43,11 @@ private
 
 def create_missing_directory(path)
   converge_by(%Q(create directory "#{path}")) do
+    resource = @current_resource
     directory path do
-      user    @current_resource.user
-      group   @current_resource.group
-      mode    @current_resource.mode
+      user    resource.user
+      group   resource.group
+      mode    resource.mode
     end
   end
 end
