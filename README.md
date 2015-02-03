@@ -45,7 +45,7 @@ end
 ## `capistrano_rails_database`
 
 Creates or updates `shared/config/database.yml`.
-You must have created `shared/config` beforehand.
+You must create `shared/config` beforehand.
 
 Attributes:
 
