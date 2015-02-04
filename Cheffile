@@ -1,0 +1,6 @@
+site "http://community.opscode.com/api/v1"
+
+cookbook "capistrano-rails", path: "."
+cookbook "test", path: "spec/cookbooks/test"
+
+# vim: :set filetype=ruby:
