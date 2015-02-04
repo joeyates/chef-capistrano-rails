@@ -26,7 +26,7 @@ Attributes:
 * `user` - (required) the owner of the directory tree
 * `group` - (required) the group owner of the directory tree
 * `mode` - the permissions to set on directories. Default: 0755.
-* `shared` - an Array of directories (along with `config`) to create
+* `extra` - an Array of directories (along with `config`) to create
   under `shared`. Default: `[]`
 
 Note: `shared/config` will get created even if it is not in the

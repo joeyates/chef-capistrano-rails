@@ -33,7 +33,7 @@ def load_current_resource
     base,
     ::File.join(base, "shared"),
   ]
-  shared = @new_resource.shared | ["config"]
+  shared = @new_resource.extra | ["config"]
   directories += shared.map { |p| ::File.join(base, "shared", p) }
 
   @current_resource.paths = directories
