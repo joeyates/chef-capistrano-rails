@@ -38,7 +38,7 @@ def updating_data
     @current_resource.environment => {
       "adapter" => @current_resource.adapter,
       "database" => @current_resource.database,
-      "user" => @current_resource.user,
+      "username" => @current_resource.username,
       "password" => @current_resource.password,
     }.merge(stringified)
   }
