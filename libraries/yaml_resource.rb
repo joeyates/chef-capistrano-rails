@@ -14,7 +14,12 @@ module YamlResource
   def create_or_update_yaml_resource(path, data, user, group, mode)
     resource_directory = ::File.dirname(path)
     if ! directory_exists?(resource_directory)
-      raise %Q(The resource's directory "#{resource_directory}" does not exist)
+      if Chef::Config[:why_run]
+        description = "need the resource directory '#{resource_directory}' to be created first"
+        converge_by(description) {}
+      else
+        raise %Q(The resource's directory "#{resource_directory}" does not exist)
+      end
     end
 
     if ::File.exist?(path)
