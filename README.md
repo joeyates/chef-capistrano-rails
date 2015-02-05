@@ -1,7 +1,7 @@
 # chef-capistrano-rails
 
-A [chef][chef] recipe to set up directories and configuration files for
-[Capistrano][capistrano] [Rails][rails] deployments.
+`capistrano-rails` is an LWRP which handles directories and configuration
+files for [Capistrano][capistrano] [Rails][rails] deployments.
 
 [chef]: http://en.wikipedia.org/wiki/Chef_%28software%29
 [capistrano]: http://capistranorb.com/
