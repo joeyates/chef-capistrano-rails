@@ -3,15 +3,13 @@
 # Including providers must supply the following:
 # * path - the path to the YAML file
 # * data - the data to be merged into the file
-# * user, group and mode
+# * new_user, new_group and new_mode
 
 require "etc"
 require "yaml"
 
 module YamlResource
-  include AttributesConverger
-
-  def create_or_update_yaml_resource(path, data, user, group, mode)
+  def create_or_update_yaml_resource(path, data, new_user, new_group, new_mode)
     resource_directory = ::File.dirname(path)
     if ! directory_exists?(resource_directory)
       if Chef::Config[:why_run]
@@ -22,44 +20,17 @@ module YamlResource
       end
     end
 
-    if ::File.exist?(path)
-      optionally_update_permissions path, mode
-      optionally_update_ownership path, user, group
+    existing = existing_data(path)
+    new_content = merged_content(existing, data)
+    file path do
+      content new_content
+      user new_user
+      group new_group
+      mode new_mode
     end
-
-    optionally_update_file path, data, user, group, mode
   end
 
   private
-
-  def optionally_update_file(path, data, user, group, mode)
-    existing = existing_data(path)
-    new_content = merged_content(existing, data)
-
-    yaml_diff = DiffableResource.create_diff(path, new_content)
-    return if yaml_diff.nil?
-
-    description =
-      if ::File.exist?(path)
-        %Q(update "#{path}")
-      else
-        %Q(create "#{path}")
-      end
-
-    description << "\n"
-    description << yaml_diff
-    converge_by(description) do
-      write_file(path, new_content, user, group, mode)
-    end
-  end
-
-  def write_file(path, content, user, group, mode)
-    ::File.open(path, "w") do |f|
-      f.write content
-    end
-    update_permissions path, mode
-    update_ownership path, user, group
-  end
 
   def existing_data(path)
     if ::File.exist?(path)
