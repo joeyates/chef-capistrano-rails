@@ -7,12 +7,16 @@ A [chef][chef] recipe to set up directories and configuration files for
 [capistrano]: http://capistranorb.com/
 [rails]: http://rubyonrails.org/
 
-# Chef and Capistrano
+# Resources
+
+* directories
+* database
+* secrets
 
 These resources prepare the directories and minimal configuration files
-to prepare for Capistrano deployment.
+to prepare for Capistrano deployment of Rails applications.
 
-## Configuration
+# Configuration
 
 For Rails 4 with Capistrano 3, use the following in your Rails project's
 `config/deploy.rb`:
