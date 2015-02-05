@@ -1,12 +1,28 @@
 # chef-capistrano-rails
 
-A chef recipe to set up directories and configuration files for a
-Rails deployment 
+A [chef][chef]][chef]][chef] recipe to set up directories and configuration files for
+[Capistrano][capistrano] [Rails][rails] deployments.
+
+[chef]: http://en.wikipedia.org/wiki/Chef_%28software%29
+[capistrano]: http://capistranorb.com/
+[rails]: http://rubyonrails.org/
 
 # Chef and Capistrano
 
 These resources prepare the directories and minimal configuration files
 to prepare for Capistrano deployment.
+
+## Configuration
+
+For Rails 4 with Capistrano 3, use the following in your Rails project's
+`config/deploy.rb`:
+
+```ruby
+set :linked_files, %w{
+  config/database.yml
+  config/secrets.yml
+}
+```
 
 # Directives
 
