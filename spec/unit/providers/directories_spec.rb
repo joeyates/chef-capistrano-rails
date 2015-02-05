@@ -15,9 +15,9 @@ describe "test::capistrano_rails_directories" do
     }
   end
 
-  shared_examples "creates directories" do |extra = []|
+  shared_examples "creates directories" do |extra_shared = []|
     defaults = [[], %w(shared), %w(shared config)]
-    extras = extra.map { |p| ["shared", p] }
+    extras = extra_shared.map { |p| ["shared", p] }
     (defaults + extras).each do |p|
       it "creates '#{p.join("/")}'" do
         path = File.join("", "var", "www", "foo", *p)
@@ -53,9 +53,9 @@ describe "test::capistrano_rails_directories" do
     end
   end
 
-  context "when adding extra directories 'bar' and 'quux'" do
+  context "when adding extra_shared directories 'bar' and 'quux'" do
     before do
-      chef_run.node.set["cookbook"]["extra"] = %w(bar quux)
+      chef_run.node.set["cookbook"]["extra_shared"] = %w(bar quux)
       chef_run.converge(described_recipe)
     end
 
