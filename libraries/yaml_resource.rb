@@ -1,11 +1,5 @@
 # The resource should be a YAML file
 
-# Including providers must supply the following:
-# * path - the path to the YAML file
-# * data - the data to be merged into the file
-# * new_user, new_group and new_mode
-
-require "etc"
 require "yaml"
 
 module YamlResource
@@ -22,6 +16,7 @@ module YamlResource
 
     existing = existing_data(path)
     new_content = merged_content(existing, data)
+
     file path do
       content new_content
       user new_user

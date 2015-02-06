@@ -9,12 +9,15 @@ configuration files for [Capistrano][capistrano] [Rails][rails] deployments.
 
 # Resources
 
-* directories
-* database
-* secrets
+* directories - maintains the minimal set of directories to permit
+  deployment
+* database - maintains `database.yml`
+* secrets - maintains `secrets.yml`
+* application - the one-stop shop: directories, database and secrets in one
+  resource.
 
-These resources prepare the directories and minimal configuration files
-to prepare for Capistrano deployment of Rails applications.
+These resources manage the directories and minimal configuration files
+for Capistrano deployment of a Rails application.
 
 # Configuration
 
@@ -30,22 +33,26 @@ set :linked_files, %w{
 
 # Directives
 
-* `capistrano_rails_directories` - maintains the minimal set of directories
-  to permit deployment,
-* `capistrano_rails_database` - creates `shared/config/database.yml`,
-* `capistrano_rails_secrets` - creates `shared/config/secrets.yml`.
+* `capistrano_rails_directories` - manages `shared` and `shared/config`
+* `capistrano_rails_database` - manages `shared/config/database.yml`,
+* `capistrano_rails_secrets` - manages `shared/config/secrets.yml`.
+* `capistrano_rails_application` - combines all of the above.
 
 ## `capistrano_rails_directories`
 
-Sets up the base directory, `shared` and its subdirectories.
+Manages up the base directory, `shared` and its subdirectories.
+
+Actions:
+
+* `:create`
 
 Attributes:
 
-* `path` - the deployment's base directory (defaults to the name of
+* `base_path` - the deployment's base directory (defaults to the name of
   the directive)
 * `user` - (required) the owner of the directory tree
 * `group` - (required) the group owner of the directory tree
-* `mode` - the permissions to set on directories. Default: 0755.
+* `directory_mode` - the permissions to set on directories. Default: 0755.
 * `extra_shared` - an Array of directories (along with `config`) to create
   under `shared`. Default: `[]`
 
@@ -64,20 +71,27 @@ end
 
 ## `capistrano_rails_database`
 
-Creates or updates `shared/config/database.yml`.
+Manages `shared/config/database.yml`.
 You must create `shared/config` beforehand.
+
+Actions:
+
+* `:create`
 
 Attributes:
 
-* `path` - the deployment's directory (defaults to the name of the directive)
+* `base_path` - the deployment's base directory (defaults to the name of the
+  directive). Note: this is the **base** path, not the path to the
+  `database.yml` file itself
 * `user` - (required) the owner of the file
 * `group` - (required) the group owner of the file
-* `mode` - the permissions to set on the file. Default: 0600.
+* `file_mode` - the permissions to set on the file. Default: 0600.
 * `environment` - the Rails environment. Default: `production`
 * `database` - (required) the name of the database
 * `username` - (required) the database user name
 * `password` - (required) the database password
-* `options` - a Hash of other options (e.g. `pool`, `encoding`, etc). Default: `{}`
+* `connection_options` - a Hash of other connection options (e.g.
+  `pool`, `encoding`, etc). Default: `{}`
 
 The supplied configuration is merged into any existing file. So, multiple
 `capistrano_rails_database` directives can be used for a single
@@ -87,13 +101,51 @@ Note: the directive does **not** manage the database itself.
 
 ## `capistrano_rails_secrets`
 
-Creates `shared/config/secrets.yml`.
+Manages `shared/config/secrets.yml`.
+
+Actions:
+
+* `:create`
 
 Attributes:
 
-* `path` - the deployment's directory (defaults to the name of the directive),
+* `base_path` - the deployment's directory (defaults to the name of the directive),
+* `user` - (required) the owner of the file
+* `group` - (required) the group owner of the file
+* `file_mode` - the permissions to set on the file. Default: 0600.
 * `environment` - the Rails environment. Default: `production`
-* `secret_key_base` - (required) the application's `secret_key_base`,
+* `secret_key_base` - (required) the application's `secret_key_base`
 * `other_secrets` - a Hash of other values to include in the file.
 
 The supplied data is used to merged into any existing file.
+
+## `capistrano_rails_application`
+
+Combines all of the other directives.
+
+Actions:
+
+* `:create`
+
+Attributes:
+
+Common attributes:
+* `base_path` - the deployment's directory (defaults to the name of the directive),
+* `user` - (required) the owner of the file
+* `group` - (required) the group owner of the file
+* `environment` - the Rails environment. Default: `production`
+* `file_mode` - the permissions to set on files. Default: 0600.
+
+For `capistrano_rails_directories`:
+* `directory_mode` - the permissions to set on directories. Default: 0755.
+* `extra_shared` - an Array of directories (along with `config`) to create
+
+For `capistrano_rails_database`:
+* `database`
+* `username`
+* `password`
+* `connection_options`
+
+For `capistrano_rails_secrets`
+* `secret_key_base`
+* `other_secrets`

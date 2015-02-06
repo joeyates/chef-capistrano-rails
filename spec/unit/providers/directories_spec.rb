@@ -4,8 +4,8 @@ describe "test::capistrano_rails_directories" do
   let(:chef_run) do
     ChefSpec::Runner.new(step_into: ["capistrano_rails_directories"])
   end
-  let(:base) { ::File.join("", "var", "www", "foo") }
-  let(:shared) { File.join(base, "shared") }
+  let(:base_path) { ::File.join("", "var", "www", "foo") }
+  let(:shared) { File.join(base_path, "shared") }
   let(:config) { File.join(shared, "config") }
   let(:expected) do
     {
@@ -27,7 +27,7 @@ describe "test::capistrano_rails_directories" do
   end
 
   before do
-    chef_run.node.set["cookbook"]["name"] = base
+    chef_run.node.set["cookbook"]["name"] = base_path
     chef_run.node.set["cookbook"]["user"] = "fred"
     chef_run.node.set["cookbook"]["group"] = "smith"
   end
@@ -40,11 +40,11 @@ describe "test::capistrano_rails_directories" do
     end
   end
 
-  context "when overriding 'mode'" do
+  context "when overriding 'directory_mode'" do
     let(:expected) { super().merge(mode: 0700) }
 
     before do
-      chef_run.node.set["cookbook"]["mode"] = 0700
+      chef_run.node.set["cookbook"]["directory_mode"] = 0700
       chef_run.converge(described_recipe)
     end
 

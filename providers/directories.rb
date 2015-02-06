@@ -8,21 +8,24 @@ action :create do
     directory path do
       user resource.user
       group resource.group
-      mode resource.mode
+      mode resource.directory_mode
     end
   end
 end
 
 def load_current_resource
-  @current_resource = Chef::Resource::CapistranoRailsDirectories.new(
-    @new_resource.name
-  )
-  @current_resource.name(@new_resource.name)
-  @current_resource.user(@new_resource.user)
-  @current_resource.group(@new_resource.group)
-  @current_resource.mode(@new_resource.mode)
+  @current_resource = @new_resource.class.new(@new_resource.base_path)
+  Chef::Resource::CapistranoRailsDirectories::ALL_ATTRIBUTES.each do |attr|
+    @current_resource.send(attr, @new_resource.send(attr))
+  end
 
-  base = @new_resource.path
+  build_directory_list
+end
+
+private
+
+def build_directory_list
+  base = @new_resource.base_path
   directories = [
     base,
     ::File.join(base, "shared"),

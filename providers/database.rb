@@ -10,30 +10,22 @@ action :create do
     updating_data,
     @current_resource.user,
     @current_resource.group,
-    @current_resource.mode
+    @current_resource.file_mode
   )
 end
 
 def load_current_resource
-  @current_resource = Chef::Resource::CapistranoRailsDatabase.new(
-    @new_resource.directory
-  )
-  @current_resource.directory(@new_resource.directory)
-  @current_resource.adapter(@new_resource.adapter)
-  @current_resource.database(@new_resource.database)
-  @current_resource.user(@new_resource.user)
-  @current_resource.group(@new_resource.group)
-  @current_resource.mode(@new_resource.mode)
-  @current_resource.username(@new_resource.username)
-  @current_resource.password(@new_resource.password)
-  @current_resource.environment(@new_resource.environment)
-  @current_resource.options(@new_resource.options)
+  @current_resource = @new_resource.class.new(@new_resource.base_path)
+  Chef::Resource::CapistranoRailsDatabase::ALL_ATTRIBUTES.each do |attr|
+    @current_resource.send(attr, @new_resource.send(attr))
+  end
 end
 
+private
+
 def updating_data
-  stringified = @current_resource.options.each.with_object({}) do |(k, v), h|
-    h[k.to_s] = v
-  end
+  stringified = stringify_keys(@current_resource.connection_options)
+
   {
     @current_resource.environment => {
       "adapter" => @current_resource.adapter,
@@ -45,9 +37,15 @@ def updating_data
 end
 
 def resource_directory
-  ::File.join(@current_resource.directory, "shared", "config")
+  ::File.join(@current_resource.base_path, "shared", "config")
 end
 
 def current_resource_path
   ::File.join(resource_directory, "database.yml")
+end
+
+def stringify_keys(hash)
+  hash.each.with_object({}) do |(k, v), h|
+    h[k.to_s] = v
+  end
 end
