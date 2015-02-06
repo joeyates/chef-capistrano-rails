@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe "test::capistrano_rails_application" do
   let(:base_path) { ::File.join("", "var", "www", "foo") }
   let(:user) { "user" }
