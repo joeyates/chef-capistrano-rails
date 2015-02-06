@@ -1,5 +1,5 @@
 source "https://rubygems.org"
 
-gem "chefspec", "~> 4.0.1"
+gem "chefspec", "~> 4.2.0"
 gem "librarian-chef"
 gem "pry-byebug"

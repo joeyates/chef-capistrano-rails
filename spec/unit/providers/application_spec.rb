@@ -1,9 +1,6 @@
 require "spec_helper"
 
 describe "test::capistrano_rails_application" do
-  let(:chef_run) do
-    ChefSpec::Runner.new(step_into: ["capistrano_rails_application"])
-  end
   let(:base_path) { ::File.join("", "var", "www", "foo") }
   let(:user) { "user" }
   let(:group) { "group" }
@@ -13,15 +10,17 @@ describe "test::capistrano_rails_application" do
   let(:password) { "password" }
   let(:secret_key_base) { "secret_key_base" }
 
-  before do
-    chef_run.node.set["cookbook"]["name"] = base_path
-    chef_run.node.set["cookbook"]["user"] = user
-    chef_run.node.set["cookbook"]["group"] = group
-    chef_run.node.set["cookbook"]["adapter"] = adapter
-    chef_run.node.set["cookbook"]["database"] = database
-    chef_run.node.set["cookbook"]["username"] = username
-    chef_run.node.set["cookbook"]["password"] = password
-    chef_run.node.set["cookbook"]["secret_key_base"] = secret_key_base
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new(step_into: ["capistrano_rails_application"]) do |node|
+      node.set["cookbook"]["name"] = base_path
+      node.set["cookbook"]["user"] = user
+      node.set["cookbook"]["group"] = group
+      node.set["cookbook"]["adapter"] = adapter
+      node.set["cookbook"]["database"] = database
+      node.set["cookbook"]["username"] = username
+      node.set["cookbook"]["password"] = password
+      node.set["cookbook"]["secret_key_base"] = secret_key_base
+    end
   end
 
   context "with required attributes" do

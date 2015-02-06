@@ -1,9 +1,6 @@
 require "spec_helper"
 
 describe "test::capistrano_rails_directories" do
-  let(:chef_run) do
-    ChefSpec::Runner.new(step_into: ["capistrano_rails_directories"])
-  end
   let(:base_path) { ::File.join("", "var", "www", "foo") }
   let(:shared) { File.join(base_path, "shared") }
   let(:config) { File.join(shared, "config") }
@@ -15,6 +12,14 @@ describe "test::capistrano_rails_directories" do
     }
   end
 
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new(step_into: ["capistrano_rails_directories"]) do |node|
+      node.set["cookbook"]["name"] = base_path
+      node.set["cookbook"]["user"] = "fred"
+      node.set["cookbook"]["group"] = "smith"
+    end
+  end
+
   shared_examples "creates directories" do |extra_shared = []|
     defaults = [[], %w(shared), %w(shared config)]
     extras = extra_shared.map { |p| ["shared", p] }
@@ -24,12 +29,6 @@ describe "test::capistrano_rails_directories" do
         expect(chef_run).to create_directory(path).with(expected.merge(path: path))
       end
     end
-  end
-
-  before do
-    chef_run.node.set["cookbook"]["name"] = base_path
-    chef_run.node.set["cookbook"]["user"] = "fred"
-    chef_run.node.set["cookbook"]["group"] = "smith"
   end
 
   context "supplying minimal attributes" do

@@ -1,9 +1,6 @@
 require "spec_helper"
 
 describe "test::capistrano_rails_database" do
-  let(:chef_run) do
-    ChefSpec::Runner.new(step_into: ["capistrano_rails_database"])
-  end
   let(:base_path) { ::File.join("", "var", "www", "foo") }
   let(:config_path) { ::File.join(base_path, "shared", "config") }
   let(:config_exists) { true }
@@ -27,16 +24,21 @@ describe "test::capistrano_rails_database" do
   end
   let(:expected_content) { yaml_without_separator(expected_data) }
 
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new(step_into: ["capistrano_rails_database"]) do |node|
+      node.set["cookbook"]["name"] = base_path
+      node.set["cookbook"]["user"] = user
+      node.set["cookbook"]["group"] = group
+      node.set["cookbook"]["adapter"] = adapter
+      node.set["cookbook"]["database"] = database
+      node.set["cookbook"]["username"] = username
+      node.set["cookbook"]["password"] = password
+    end
+  end
+
   before do
     allow(::File).to receive(:directory?).and_call_original
     allow(::File).to receive(:directory?).with(config_path) { config_exists }
-    chef_run.node.set["cookbook"]["name"] = base_path
-    chef_run.node.set["cookbook"]["user"] = user
-    chef_run.node.set["cookbook"]["group"] = group
-    chef_run.node.set["cookbook"]["adapter"] = adapter
-    chef_run.node.set["cookbook"]["database"] = database
-    chef_run.node.set["cookbook"]["username"] = username
-    chef_run.node.set["cookbook"]["password"] = password
   end
 
   context "supplying minimal attributes" do
