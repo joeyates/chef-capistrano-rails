@@ -33,7 +33,13 @@ def updating_data
       "username" => @current_resource.username,
       "password" => @current_resource.password,
     }.merge(stringified)
-  }
+  }.merge(other_databases)
+end
+
+def other_databases
+  @current_resource.other_databases.each.with_object({}) do |(env, config), a|
+    a[env] = stringify_keys(config)
+  end
 end
 
 def resource_directory

@@ -25,6 +25,7 @@ attribute :database, kind_of: String, required: true
 attribute :username, kind_of: String, required: true
 attribute :password, kind_of: String, required: true
 attribute :connection_options, kind_of: Hash, default: {}
+attribute :other_databases, kind_of: Hash, default: {}
 
 # secrets
 attribute :secret_key_base, kind_of: String, required: true

@@ -7,6 +7,7 @@
 ALL_ATTRIBUTES = %i(
   base_path user group file_mode environment
   adapter database username password connection_options
+  other_databases
 )
 
 actions :create
@@ -22,3 +23,4 @@ attribute :database, kind_of: String, required: true
 attribute :username, kind_of: String, required: true
 attribute :password, kind_of: String, required: true
 attribute :connection_options, kind_of: Hash, default: {}
+attribute :other_databases, kind_of: Hash, default: {}

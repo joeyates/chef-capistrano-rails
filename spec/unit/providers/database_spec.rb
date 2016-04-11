@@ -92,4 +92,38 @@ describe "test::capistrano_rails_database" do
       expect(chef_run).to create_file(path).with(content: expected_content)
     end
   end
+
+  context "with other_databases" do
+    let(:other_environment) { "foo" }
+    let(:other_database) { "xxx" }
+    let(:other_username) { "bar" }
+    let(:other_password) { "baz" }
+    let(:other_config) do
+      {
+        "adapter" => adapter,
+        "database" => other_database,
+        "username" => other_username,
+        "password" => other_password,
+      }
+    end
+    let(:other_data) do
+      {
+        other_environment => other_config
+      }
+    end
+    let(:expected_data) do
+      data = super()
+      data[other_environment] = other_config
+      data
+    end
+
+    before do
+      chef_run.node.set["cookbook"]["other_databases"] = other_data
+      chef_run.converge(described_recipe)
+    end
+
+    it "includes the databases" do
+      expect(chef_run).to create_file(path).with(content: expected_content)
+    end
+  end
 end
