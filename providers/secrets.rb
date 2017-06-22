@@ -27,7 +27,7 @@ def updating_data
   {
     @current_resource.environment => {
       "secret_key_base" => @current_resource.secret_key_base,
-    }.merge(@current_resource.other_secrets)
+    }.merge(@current_resource.other_secrets.to_hash)
   }
 end
 
