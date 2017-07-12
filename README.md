@@ -149,3 +149,23 @@ For `capistrano_rails_database`:
 For `capistrano_rails_secrets`
 * `secret_key_base`
 * `other_secrets`
+
+Example:
+
+```ruby
+capistrano_rails_application app_base do
+  user    app_user
+  group   app_group
+  adapter "postgresql"
+  environment rails_env
+  database    database_name
+  password    database_password
+  username    database_username
+  connection_options(
+    encoding: "unicode",
+    pool:     5
+  )
+  secret_key_base app_secret_key_base
+  other_secrets app_other_secrets
+end
+```
